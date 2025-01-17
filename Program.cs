@@ -2,16 +2,18 @@
 {
     internal class Program
     {
+        private static bool isPlaying = true;
         static void Main(string[] args)
         {
             Console.WriteLine("Welcome to the Legend of Zelda Text Adventure Game!");
             Console.WriteLine("Your journey begins now...");
             Console.WriteLine();
 
-            bool isPlaying = true;
+            //bool isPlaying = true;
 
             while (isPlaying)
             {
+                Console.Clear();
                 Console.WriteLine("You are standing at your house in Kokiri Village. Where would you like to go?");
                 Console.WriteLine("1. Enter the Kokori forest");
                 Console.WriteLine("2. Explore the The Great Deku Tree");
@@ -19,16 +21,16 @@
                 Console.WriteLine("4. Quit the game");
 
                 Console.Write("Enter your choice: ");
-                string choice = Console.ReadLine();
+                string? choice = Console.ReadLine();
 
                 switch (choice)
                 {
                     case "1":
-                        Console.WriteLine("You walk into the dark forest. You see four ways to go, with a feint music sound coming fomr the right direction.");
+                        EnterKokiriForest();
                         break;
 
                     case "2":
-                        Console.WriteLine("You enter the mouth of the Great Deku Tree. It's cold and damp, and you something that sounds like a spider coming from deep within.");
+                        EnterDekuTree();
                         break;
 
                     case "3":
@@ -45,8 +47,104 @@
                         break;
                 }
 
-                Console.WriteLine();
+
             }
         }
+
+        static void EnterKokiriForest()
+        {
+            Console.Clear();
+            Console.WriteLine("You notice there is only one you can go and that is to the right.");
+            Console.WriteLine("Do you go to the right or do you go back the way you came?");
+            Console.WriteLine("1. Go to the right.");
+            Console.WriteLine("2. Go back to your house.");
+
+            Console.WriteLine("Enter your choice");
+            string? choice = Console.ReadLine();
+
+            switch (choice)
+            {
+                case "1":
+                    InteractSkullKid();
+                    break;
+
+                case "2":
+                    Console.WriteLine("You go back to the safety of your home.");
+                    return;
+
+                default:
+                    Console.WriteLine("Invalid choice. Please try again.");
+                    break;
+
+
+
+            }
+
+
+        }
+
+        static void InteractSkullKid()
+        {
+            Console.Clear();
+            Console.WriteLine("You run into a little kid wearing a Skull Mask. He seems to be holding a weird musical device.");
+            Console.WriteLine("He's playing a lovely tune, sounds very familiar to the ears.");
+            Console.WriteLine("1. Go back to your house.");
+            Console.WriteLine("2. Quit the game.");
+
+            Console.WriteLine("Enter your choice");
+            string? choice = Console.ReadLine();
+
+            switch (choice)
+            {
+                case "1":
+                    return;
+
+                case "2":
+                    Console.WriteLine("Thanks for playing! Goodbye!");
+                    isPlaying = false;
+                    break;
+
+
+                default:
+                    Console.WriteLine("Invalid choice. Please try again.");
+                    break;
+            }
+
+
+        }
+
+        static void EnterDekuTree()
+        {
+            Console.Clear();
+            Console.WriteLine("You notice a bunch of monsters that have taken over the Deku Tree");
+            Console.WriteLine("You feel like you have the ability to wipe all the monsters with the magic power you possess.");
+            Console.WriteLine("1. Attempt to use that magic power");
+            Console.WriteLine("2. Run away like the coward you are.");
+
+            Console.WriteLine("Enter your choice");
+            string? choice = Console.ReadLine();
+
+            switch (choice)
+            {
+                case "1":
+                    Console.WriteLine("Your magic ability has failed you and the monsters have attacked. You have died.");
+                    isPlaying = false;
+                    break;
+
+                case "2":
+                    //Console.WriteLine("You go back to the safety of your home.");
+                    return;
+
+                default:
+                    Console.WriteLine("Invalid choice. Please try again.");
+                    break;
+
+
+
+            }
+
+
+        }
+
     }
 }
