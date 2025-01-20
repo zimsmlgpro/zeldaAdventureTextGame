@@ -8,8 +8,18 @@ namespace AdventureGame
     {
         private static bool isPlaying = true;
         public static string border = "***********************";        
-        public static Player Player { get; set; } 
+        public static Player Player { get; set; }
+
+
         
+        static void WritePrompt(string prompt, List<string> options) 
+        {
+           // Output prompt
+           Console.WriteLine(prompt);
+
+           options.ForEach(option => Console.WriteLine(option));
+        
+        }        
         
 
 
@@ -47,14 +57,9 @@ namespace AdventureGame
                     firstTime = false;
                 }
                 
-                Console.WriteLine("You are standing at your house in Kokiri Village. Where would you like to go?");
-                Console.WriteLine("1. Enter the Kokori forest");
-                Console.WriteLine("2. Explore the The Great Deku Tree");
-                Console.WriteLine("3. Enter the Kokori Village Shop");
-                Console.WriteLine("4. Save the game");
-                Console.WriteLine("5. Quit the game");
-                Console.WriteLine("Type Inv to see your current inventory.");
-
+                List<string> introOptions = ["1. Enter the Kokori forest" , "2. Explore the The Great Deku Tree" , "3. Enter the Kokori Village Shop" , "4. Save the game" , "5. Quit the game" , "Type Inv to see your current inventory."];
+                WritePrompt("You are standing at your house in Kokiri Village. Where would you like to go?", introOptions);
+                
                 Console.Write("Enter your choice: ");
                 string? choice = Console.ReadLine();
 
@@ -104,10 +109,8 @@ namespace AdventureGame
         static void EnterKokiriForest()
         {
             Console.Clear();
-            Console.WriteLine("You notice there is only one you can go and that is to the right.");
-            Console.WriteLine("Do you go to the right or do you go back the way you came?");
-            Console.WriteLine("1. Go to the right.");
-            Console.WriteLine("2. Go back to your house.");
+            List<string> forestOptions = ["1. Go to the right.", "2. Go back to your house."];
+            WritePrompt("You notice there is only one you can go and that is to the right.\nDo you go to the right or do you go back the way you came?", forestOptions);
 
             Console.WriteLine("Enter your choice");
             string? choice = Console.ReadLine();
@@ -143,9 +146,8 @@ namespace AdventureGame
         static void InteractSkullKid()
         {
             Console.Clear();
-            Console.WriteLine("You run into a little kid wearing a Skull Mask. He seems to be holding a weird musical device.");
-            Console.WriteLine("He's playing a lovely tune, sounds very familiar to the ears.");
-            Console.WriteLine("He hands you the ocarina");
+            List<string> skullOptions = ["1. Go back to your house.", "2. Quit the game."];
+            WritePrompt("You run into a little kid wearing a Skull Mask. He seems to be holding a weird musical device.\nHe's playing a lovely tune, sounds very familiar to the ears.\nHe hands you the ocarina", skullOptions);
             Player.Inventory.Add("Ocarina");
             Player.ShowInventory();
             Console.WriteLine("Now what would you like to do?");
@@ -263,15 +265,8 @@ namespace AdventureGame
         static void EnterKokiriShop()
         {
             Console.Clear();
-            Console.WriteLine("You see 4 items on the shelf.");
-            Console.WriteLine("It is your lucky day, the shop is going out of business and everything is free.");
-            Console.WriteLine("The 4 items are as follows: Kokori Shield, Magic Potion, Deku Stick, Deku Seed ");
-            Console.WriteLine("Which item do you grab?");
-            Console.WriteLine("1. Kokori Shield");
-            Console.WriteLine("2. Magic Potion");
-            Console.WriteLine("3. Deku Stick");
-            Console.WriteLine("4. Deku Seed");
-
+            List<string> shopOptions = ["1. Kokori Shield", "2. Magic Potion", "3. Deku Stick", "4. Deku Seed"];
+            WritePrompt("You see 4 items on the shelf.\nIt is your lucky day, the shop is going out of business and everything is free.\nThe 4 items are as follows: Kokori Shield, Magic Potion, Deku Stick, Deku Seed.\nWhich item do you grab?", shopOptions);
             Console.WriteLine("Enter your choice");
             string? choice = Console.ReadLine();
 
@@ -321,12 +316,8 @@ namespace AdventureGame
         }
 
         static void drinkMagicPotion()
-        {            
-            Console.WriteLine("You drink your magic potion");
-            Console.WriteLine("You now use your profound magic powers");
-            Console.WriteLine("You have defeated all the monsters in the tree.");
-            Console.WriteLine("The Deku Tree gives you it's thanks and you notice a gem on the floor");
-            Console.WriteLine("You pick up the gem on the floor");
+        {
+            Console.WriteLine("You drink your magic potion\nYou now use your profound magic powers\nYou have defeated all the monsters in the tree.\nThe Deku Tree gives you it's thanks and you notice a gem on the floor.\nYou pick up the gem on the floor");
             Player.Inventory.Remove("Magic Potion");
             Player.Inventory.Add("Forest Medallion");
             Player.ShowInventory();
@@ -337,9 +328,7 @@ namespace AdventureGame
 
         static void finishGame()
         {
-            Console.WriteLine("You have defeated all the creatures that brought doom to your village");
-            Console.WriteLine("Thank you for playing my Zelda text adventure game!");            
-            Console.WriteLine("\r\n");
+            Console.WriteLine("You have defeated all the creatures that brought doom to your village.\nThank you for playing my Zelda text adventure game!\r\n");
             Console.WriteLine(border);
             Console.WriteLine("Please press Q to quit or R to restart.");
             string? endChoice = Console.ReadLine();
