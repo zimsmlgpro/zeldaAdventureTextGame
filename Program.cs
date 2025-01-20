@@ -8,24 +8,45 @@ namespace AdventureGame
     {
         private static bool isPlaying = true;
         public static string border = "***********************";        
-        public static Player Player { get; set; }
+        public static Player Player { get; set; } 
+        
         
 
 
         static void Main(string[] args)
-        {            
-            Console.WriteLine("Welcome to the Legend of Zelda Text Adventure Game! Please enter your name");
-            string name = Console.ReadLine() ?? "Hero";
-            Player = new Player(name);
-            Console.WriteLine("Your journey begins now...");
-            Console.WriteLine();
+        {
+            Player = Player.Load("savegame.json");
 
+            bool firstTime = true;
+
+            if (Player == null)
+            {
+                Console.WriteLine("Welcome to the Legend of Zelda Text adventure game!");
+                Console.WriteLine("It looks like there is no save data. Please enter your name");
+                string name = Console.ReadLine() ?? "Hero";
+                Player = new Player(name);
+                Console.WriteLine($"Welcome, {Player.Name}! Your journey begins now...");
+            }
+
+            else
+            {
+                Console.WriteLine($"Welcome back, {Player.Name}! Your journey begins now...");
+                firstTime = false;
+            }
+           
             while (isPlaying = true)
             {
                 if (Player.Inventory.Contains("Forest Medallion"))
                 {
                     finishGame();                    
                 }
+                
+                if (firstTime)
+                {
+                    Console.WriteLine("Welcome to the Legend of Zelda text adventure game!");
+                    firstTime = false;
+                }
+                
                 Console.WriteLine("You are standing at your house in Kokiri Village. Where would you like to go?");
                 Console.WriteLine("1. Enter the Kokori forest");
                 Console.WriteLine("2. Explore the The Great Deku Tree");
@@ -39,6 +60,7 @@ namespace AdventureGame
 
                 if (choice.Equals("Inv", StringComparison.OrdinalIgnoreCase))
                     {
+                        Console.Clear();
                         Player.ShowInventory();
                         continue;
                     }
@@ -59,6 +81,8 @@ namespace AdventureGame
 
                     case "4":
                         Player.Save("savegame.json");
+                        Console.WriteLine("\r\n");
+                        Console.WriteLine(border);
                         break;
 
                     case "5":
@@ -91,16 +115,22 @@ namespace AdventureGame
             switch (choice)
             {
                 case "1":
+                    Console.WriteLine("\n\r");
+                    Console.WriteLine(border);
                     InteractSkullKid();
                     break;
 
                 case "2":
                     Console.Clear();
                     Console.WriteLine("You go back to the safety of your home.");
+                    Console.WriteLine("\n\r");
+                    Console.WriteLine(border);
                     return;
 
                 default:
                     Console.WriteLine("Invalid choice. Please try again.");
+                    Console.WriteLine("\n\r");
+                    Console.WriteLine(border);
                     break;
 
 
@@ -128,16 +158,22 @@ namespace AdventureGame
             switch (choice)
             {
                 case "1":
+                    Console.WriteLine("\n\r");
+                    Console.WriteLine(border);
                     return;
 
                 case "2":
                     Console.WriteLine("Thanks for playing! Goodbye!");
+                    Console.WriteLine("\n\r");
+                    Console.WriteLine(border);
                     isPlaying = false;
                     break;
 
 
                 default:
                     Console.WriteLine("Invalid choice. Please try again.");
+                    Console.WriteLine("\n\r");
+                    Console.WriteLine(border);
                     break;
             }
 
@@ -158,11 +194,15 @@ namespace AdventureGame
                 switch (userInput)
                 {
                     case "1":
+                        Console.WriteLine("\n\r");
+                        Console.WriteLine(border);
                         drinkMagicPotion();
                         return;
 
                     case "2":
                         Console.WriteLine("You put the magic potion back into your pocket to save for a future moment.");
+                        Console.WriteLine("\n\r");
+                        Console.WriteLine(border);
                         return;
 
                     default:
@@ -174,6 +214,8 @@ namespace AdventureGame
             else 
             {
                 Console.WriteLine("You may be missing something that you can use from somewhere else...");
+                Console.WriteLine("\n\r");
+                Console.WriteLine(border);
             }
 
             Console.WriteLine("You know deep down that magic exists somewhere");
@@ -203,6 +245,8 @@ namespace AdventureGame
 
                 case "2":
                     Console.WriteLine("You go back to the safety of your home.");
+                    Console.WriteLine("\n\r");
+                    Console.WriteLine(border);
                     return;
 
                 default:
@@ -297,7 +341,18 @@ namespace AdventureGame
             Console.WriteLine("Thank you for playing my Zelda text adventure game!");            
             Console.WriteLine("\r\n");
             Console.WriteLine(border);
-            Environment.Exit(0);
+            Console.WriteLine("Please press Q to quit or R to restart.");
+            string? endChoice = Console.ReadLine();
+            if (endChoice.ToLower() == "q")
+            {
+                Environment.Exit(0);                   
+            }
+            if (endChoice.ToLower() == "r")
+            {
+                Console.Clear();
+                Console.WriteLine(border);
+                return;
+            }
         }
 
     }

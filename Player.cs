@@ -11,6 +11,7 @@ namespace AdventureGame
 {
     public class Player
     {
+        //Player player = Player.Load(@"C:\Users\bdennis\Desktop\CodingProjects\zeldaAdventureTextGame\bin\Release\net8.0\savegame.json");
         public string Name { get; set; }
         public List<string> Inventory { get; set; } = new List<string>();
         public static string border = "***********************";
@@ -55,17 +56,16 @@ namespace AdventureGame
             Console.WriteLine("Game Saved Successfully.");
         }
 
-        public static Player? Load(string PlayerProgress)
+        public static Player? Load(string savegame)
         {
-            if (File.Exists(PlayerProgress))
+            if (File.Exists(savegame))
             {
-                string jsonData = File.ReadAllText(PlayerProgress);
+                string jsonData = File.ReadAllText(savegame);
                 return JsonSerializer.Deserialize<Player>(jsonData);
             }
-            else 
+            else
             {
-                Console.WriteLine("No saved game found, starting a new game.");
-                return new Player();
+                return null;  
             }
         }
     }
