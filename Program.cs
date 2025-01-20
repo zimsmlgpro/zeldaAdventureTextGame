@@ -1,12 +1,16 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
+using System.Reflection.PortableExecutable;
 
 namespace AdventureGame
 {
-    internal class Program
+    public class Program
     {
         private static bool isPlaying = true;
+        public static string border = "***********************";        
+        public static Player Player { get; set; }
+        
 
-        public static Player Player { get; private set; }
 
         static void Main(string[] args)
         {            
@@ -16,18 +20,28 @@ namespace AdventureGame
             Console.WriteLine("Your journey begins now...");
             Console.WriteLine();
 
-            //bool isPlaying = true;
-
-            while (isPlaying)
-            {                
+            while (isPlaying = true)
+            {
+                if (Player.Inventory.Contains("Forest Medallion"))
+                {
+                    finishGame();                    
+                }
                 Console.WriteLine("You are standing at your house in Kokiri Village. Where would you like to go?");
                 Console.WriteLine("1. Enter the Kokori forest");
                 Console.WriteLine("2. Explore the The Great Deku Tree");
                 Console.WriteLine("3. Enter the Kokori Village Shop");
-                Console.WriteLine("4. Quit the game");
+                Console.WriteLine("4. Save the game");
+                Console.WriteLine("5. Quit the game");
+                Console.WriteLine("Type Inv to see your current inventory.");
 
                 Console.Write("Enter your choice: ");
                 string? choice = Console.ReadLine();
+
+                if (choice.Equals("Inv", StringComparison.OrdinalIgnoreCase))
+                    {
+                        Player.ShowInventory();
+                        continue;
+                    }
 
                 switch (choice)
                 {
@@ -44,9 +58,15 @@ namespace AdventureGame
                         break;
 
                     case "4":
+                        Player.Save("savegame.json");
+                        break;
+
+                    case "5":
                         Console.WriteLine("Thanks for playing! Goodbye.");
                         isPlaying = false;
+                        Environment.Exit(0);
                         break;
+
 
                     default:
                         Console.WriteLine("Invalid choice. Please try again.");
@@ -95,6 +115,10 @@ namespace AdventureGame
             Console.Clear();
             Console.WriteLine("You run into a little kid wearing a Skull Mask. He seems to be holding a weird musical device.");
             Console.WriteLine("He's playing a lovely tune, sounds very familiar to the ears.");
+            Console.WriteLine("He hands you the ocarina");
+            Player.Inventory.Add("Ocarina");
+            Player.ShowInventory();
+            Console.WriteLine("Now what would you like to do?");
             Console.WriteLine("1. Go back to your house.");
             Console.WriteLine("2. Quit the game.");
 
@@ -124,22 +148,61 @@ namespace AdventureGame
         {
             Console.Clear();
             Console.WriteLine("You notice a bunch of monsters that have taken over the Deku Tree");
-            Console.WriteLine("You feel like you have the ability to wipe all the monsters with the magic power you possess.");
-            Console.WriteLine("1. Attempt to use that magic power");
-            Console.WriteLine("2. Run away like the coward you are.");
+            if (Player.Inventory.Exists(item => item == "Magic Potion"))
+            {
+                Console.WriteLine("Would you like to drink your magic potion that you acquired earlier?");
+                Console.WriteLine("Type 1 for yes or 2 for no.");
+                string? userInput = Console.ReadLine();
+
+
+                switch (userInput)
+                {
+                    case "1":
+                        drinkMagicPotion();
+                        return;
+
+                    case "2":
+                        Console.WriteLine("You put the magic potion back into your pocket to save for a future moment.");
+                        return;
+
+                    default:
+                        Console.WriteLine("Invalid choice. Please try again.");
+                        break;
+                }
+            }
+
+            else 
+            {
+                Console.WriteLine("You may be missing something that you can use from somewhere else...");
+            }
+
+            Console.WriteLine("You know deep down that magic exists somewhere");
+            Console.WriteLine("Do you wish to continue to try and fight the monsters?");
+            Console.WriteLine("Type 1 to continue to attack the monster or 2 to run away.");
 
             Console.WriteLine("Enter your choice");
             string? choice = Console.ReadLine();
 
+
             switch (choice)
             {
                 case "1":
-                    Console.WriteLine("Your magic ability has failed you and the monsters have attacked. You have died.");
-                    isPlaying = false;
+                    Console.WriteLine("You did not have the tools you needed to survive. You have died.");
+                    Console.WriteLine("Press R to restart the game");
+                    string? userChoice = Console.ReadLine();
+                    {
+                        if (userChoice.ToLower() != "r") //If the user doesn't press any variation of r
+                        {
+                            isPlaying = false; //Stops the whole loop
+                            Console.WriteLine("Thanks for giving my Adventure Game a try!");
+                        }
+
+                    }
+
                     break;
 
                 case "2":
-                    //Console.WriteLine("You go back to the safety of your home.");
+                    Console.WriteLine("You go back to the safety of your home.");
                     return;
 
                 default:
@@ -172,26 +235,34 @@ namespace AdventureGame
             {
                 case "1":
                     Console.WriteLine("You Grab the Kokori Shield");
-                    Player.AddItem("Kokori Shield");
+                    Player.Inventory.Add("Kokori Shield");
                     Player.ShowInventory();
+                    Console.WriteLine("\n\r");
+                    Console.WriteLine(border);
                     return;
 
                 case "2":
                     Console.WriteLine("You Grab the Magic Potion");
-                    Player.AddItem("Magic Potion");
+                    Player.Inventory.Add("Magic Potion");
                     Player.ShowInventory();
+                    Console.WriteLine("\n\r");
+                    Console.WriteLine(border);
                     return;
 
                 case "3":
                     Console.WriteLine("You Grab the Deku Stick");
-                    Player.AddItem("Deku Stick");
+                    Player.Inventory.Add("Deku Stick");
                     Player.ShowInventory();
+                    Console.WriteLine("\r\n");
+                    Console.WriteLine(border);
                     return;
 
                 case "4":
                     Console.WriteLine("You Grab the Deku Seed");
-                    Player.AddItem("Deku Seed");
+                    Player.Inventory.Add("Deku Seed");
                     Player.ShowInventory();
+                    Console.WriteLine("\r\n");
+                    Console.WriteLine(border);
                     return;
 
                 default:
@@ -203,6 +274,30 @@ namespace AdventureGame
             }
 
 
+        }
+
+        static void drinkMagicPotion()
+        {            
+            Console.WriteLine("You drink your magic potion");
+            Console.WriteLine("You now use your profound magic powers");
+            Console.WriteLine("You have defeated all the monsters in the tree.");
+            Console.WriteLine("The Deku Tree gives you it's thanks and you notice a gem on the floor");
+            Console.WriteLine("You pick up the gem on the floor");
+            Player.Inventory.Remove("Magic Potion");
+            Player.Inventory.Add("Forest Medallion");
+            Player.ShowInventory();
+            Console.WriteLine("\r\n");
+            Console.WriteLine(border);
+
+        }
+
+        static void finishGame()
+        {
+            Console.WriteLine("You have defeated all the creatures that brought doom to your village");
+            Console.WriteLine("Thank you for playing my Zelda text adventure game!");            
+            Console.WriteLine("\r\n");
+            Console.WriteLine(border);
+            Environment.Exit(0);
         }
 
     }
